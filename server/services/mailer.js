@@ -9,6 +9,17 @@ export function parseSender(from) {
   return { email: text };
 }
 
+const escapeHtml = (t) =>
+  String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+/** Plain text -> simple HTML (Brevo wants an HTML body): escaped, links clickable, line breaks kept. */
+export function textToHtml(text) {
+  const body = escapeHtml(text)
+    .replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1">$1</a>')
+    .replace(/\r?\n/g, '<br>');
+  return `<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.5">${body}</div>`;
+}
+
 /**
  * Creates the object that sends email. Everything it needs is passed in, so tests can use fakes.
  *  - "brevo": real delivery through Brevo's HTTPS API (works on hosts that block SMTP ports).
@@ -24,7 +35,7 @@ export function createMailer({ mail, production, log = console.log, fetchImpl = 
       res = await fetchImpl('https://api.brevo.com/v3/smtp/email', {
         method: 'POST',
         headers: { 'api-key': mail.brevoApiKey, 'content-type': 'application/json', accept: 'application/json' },
-        body: JSON.stringify({ sender: parseSender(mail.from), to: [{ email: to }], subject, textContent: text }),
+        body: JSON.stringify({ sender: parseSender(mail.from), to: [{ email: to }], subject, htmlContent: textToHtml(text), textContent: text }),
         signal: AbortSignal.timeout(15000),
       });
     } catch (err) {

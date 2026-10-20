@@ -113,6 +113,8 @@ describe('mailer over HTTPS (Brevo)', () => {
     assert.deepEqual(body.to, [{ email: 'ada@example.com' }]);
     assert.equal(body.subject, 'Subject');
     assert.equal(body.textContent, message.text);
+    assert.ok(body.htmlContent.includes('<a href="https://'), 'HTML body has a clickable link');
+    assert.ok(!body.htmlContent.includes('<script'), 'HTML body is escaped');
     assert.equal(calls[0].init.body.includes('xkeysib-secret'), false);
   });
 
