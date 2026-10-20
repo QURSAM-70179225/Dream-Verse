@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  @apply bg-midnight-950 font-sans text-slate-100 antialiased;
+  background-image:
+    radial-gradient(ellipse at 20% 0%, rgba(124, 58, 237, 0.22), transparent 55%),
+    radial-gradient(ellipse at 90% 20%, rgba(34, 211, 238, 0.12), transparent 50%),
+    radial-gradient(ellipse at 50% 100%, rgba(244, 114, 182, 0.12), transparent 55%);
+  background-attachment: fixed;
+}
+
+@layer components {
+  .glass {
+    @apply rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl;
+  }
+
+  .neon-text {
+    @apply bg-dream-gradient bg-clip-text font-display text-transparent;
+    background-size: 200% 200%;
+    animation: gradient-shift 8s ease infinite;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-dream-gradient px-6 py-3 font-semibold text-white shadow-neon-purple transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neon-cyan;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-neon-cyan/40 bg-white/5 px-6 py-3 font-semibold text-neon-cyan transition hover:bg-neon-cyan/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neon-cyan;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

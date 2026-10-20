@@ -1,0 +1,44 @@
+# Render "Blueprint" for the API (the website goes to Netlify or Vercel, see README > Deployment).
+# Values marked sync: false are asked for in the Render dashboard; they are never stored in Git.
+services:
+  - type: web
+    name: dreamverse-api
+    runtime: node
+    plan: free
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: "22"
+      # Render sits in front of the app; this lets rate limiting see each visitor's real address.
+      - key: TRUST_PROXY
+        value: "1"
+      # Render creates a long random secret once and keeps it.
+      - key: JWT_SECRET
+        generateValue: true
+      # Your MongoDB Atlas connection string (database user with access to the dreamverse database only).
+      - key: MONGODB_URI
+        sync: false
+      # The exact address of your website, e.g. https://dreamverse-ai.netlify.app (no trailing slash).
+      - key: CLIENT_ORIGIN
+        sync: false
+      # Same address; used inside password reset emails.
+      - key: APP_URL
+        sync: false
+      # Password reset email over HTTPS (Render's free plan blocks SMTP ports). Leave empty to skip.
+      - key: BREVO_API_KEY
+        sync: false
+      - key: MAIL_FROM
+        sync: false
+      # Live AI is optional; with these empty the app runs in labeled demo mode.
+      - key: AI_BASE_URL
+        sync: false
+      - key: AI_API_KEY
+        sync: false
+      - key: AI_MODEL
+        sync: false

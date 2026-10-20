@@ -1,0 +1,31 @@
+# Netlify settings for the website (the client folder). The API is deployed separately (render.yaml).
+# In Netlify, set the environment variable VITE_API_URL to your API address plus /api,
+# e.g. https://dreamverse-api.onrender.com/api, then deploy.
+[build]
+  base = "client"
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# The app handles its own page addresses (/dashboard, /world, ...), so every unknown path
+# returns index.html. Real files such as /assets/... are served first.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+# Built files have a content hash in their name, so they can be cached for a year.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
