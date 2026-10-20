@@ -3,6 +3,7 @@
 **Design Your Dreams. Explore Your Future.**
 
 An AI-powered 3D life simulation: describe your dream future, generate a personalized world, explore it, make life decisions, and get an actionable roadmap. Outcomes are an imaginative simulation, not predictions.
+**Deployed Link** : https://dreamverseai.netlify.app/
 
 ## Status
 
